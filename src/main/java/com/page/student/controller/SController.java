@@ -19,7 +19,7 @@ public class SController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "pages/login";
     }
 
     @PostMapping("/login")
@@ -28,22 +28,22 @@ public class SController {
         String password = request.getParameter("password");
 
         if ("lokesh".equals(username) && "cseirtt".equals(password)) {
-            return "redirect:/home";
+            return "redirect:pages/home";
         } else {
             request.setAttribute("error", "Invalid username or password");
-            return "login";
+            return "pages/login";
         }
     }
 
     @GetMapping("/home")
     public String home() {
-        return "index";
+        return "pages/index";
     }
 
     @PostMapping("/submit")
     public String submit(SModel student) {
         repo.save(student);
-        return "redirect:/students";
+        return "redirect:pages/students";
     }
      
         
@@ -51,7 +51,7 @@ public class SController {
     public String viewStudents(HttpServletRequest request) {
         List<SModel> students = repo.findAll();
         request.setAttribute("students", students);
-        return "view";
+        return "pages/view";
     }
 
     @GetMapping("/students/edit/{rollno}")
@@ -59,18 +59,18 @@ public class SController {
         SModel student = repo.findById(rollno)
             .orElseThrow(() -> new IllegalArgumentException("Invalid roll number: " + rollno));
         model.addAttribute("student", student);
-        return "editStudent";
+        return "pages/editStudent";
     }
 
     @PostMapping("/students/update")
     public String updateStudent(@ModelAttribute SModel student) {
         repo.save(student);
-        return "redirect:/students";
+        return "redirect:pages/students";
     }
 
     @GetMapping("/students/delete/{rollno}")
     public String deleteStudent(@PathVariable int rollno) {
         repo.deleteById(rollno);
-        return "redirect:/students";
+        return "redirect:pages/students";
     }
 }
